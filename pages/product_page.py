@@ -1,3 +1,5 @@
+import pytest
+
 from .base_page import BasePage
 from .locators import ProductPageLocators
 
@@ -25,20 +27,32 @@ class ProductPage(BasePage):
     # Expectations
     def should_be_button_add_to_basket(self):
         assert self.is_element_present(*ProductPageLocators.ADD_TO_CART_BUTTON), \
-            "Button \"Add to cart\" is not presented"
+            f'Button \'Add to cart\' is not presented [URL:{self.current_url}]'
+
+    def should_not_be_success_message(self):
+        assert self.is_not_element_present(*ProductPageLocators.SUCCESS_MESSAGE), \
+            "Success message is presented, but should not be"
+
+    def should_be_success_message(self):
+        assert self.is_element_present(*ProductPageLocators.SUCCESS_MESSAGE), \
+            "Success message is not presented, but should be"
+
+    def should_be_success_message_disappeared(self):
+        assert self.is_disappeared(*ProductPageLocators.SUCCESS_MESSAGE), \
+            "Success message is not disappeared"
 
     def should_be_product_name(self):
         assert self.browser.find_element(*ProductPageLocators.PRODUCT_NAME).text is not None, \
-            "Product name is not present"
+            f'Product name is not present [URL:{self.current_url}]'
 
-    def should_be_product_name_equal_product_name_in_message(self):
+    def should_be_product_name_in_message(self):
         assert self._get_product_name_in_message() == self._get_product_name(), \
-            'Product name not equal product name in message'
+            f'Product name not equal product name in message [URL:{self.current_url}]'
 
-    def should_be_product_price_equal_product_price_in_message(self):
+    def should_be_product_price_in_message(self):
         assert self._get_product_price_in_message() == self._get_product_price(), \
-            'Product price not equal product price in message'
+            f'Product price not equal product price in message [URL:{self.current_url}]'
 
     def should_be_product_price(self):
         assert self.is_element_present(*ProductPageLocators.PRICE) is not None, \
-            "Product price is not present"
+            f'Product price is not present [URL:{self.current_url}]'
